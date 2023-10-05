@@ -11,7 +11,7 @@ public static class LocalWordFilter
 {
     [FunctionName("LocalWordFilter")]
     public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] Payload req,
         ILogger log)
     {
         log.LogInformation("C# HTTP trigger function LocalWordFilter processed a request.");
