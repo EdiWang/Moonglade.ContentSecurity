@@ -9,12 +9,12 @@ namespace Moonglade.ContentSecurity;
 
 public static class LocalWordFilter
 {
-    [FunctionName("LocalWordFilter")]
+    [FunctionName("Mask")]
     public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] Payload req,
         ILogger log)
     {
-        log.LogInformation("C# HTTP trigger function LocalWordFilter processed a request.");
+        log.LogInformation("C# HTTP trigger function Mask processed a request.");
 
         return new OkResult();
     }
