@@ -6,4 +6,5 @@ public class ModeratorResponse
     public string Moderator { get; set; }
     public string Mode { get; set; }
     public string ProcessedContent { get; set; }
+    public bool? Positive { get; set; }
 }

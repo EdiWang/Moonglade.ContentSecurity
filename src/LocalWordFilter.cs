@@ -10,7 +10,7 @@ namespace Moonglade.ContentSecurity;
 
 public static class LocalWordFilter
 {
-    [FunctionName("Mask")]
+    [FunctionName("LocalMask")]
     public static async Task<IActionResult> Mask(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "local/mask")] Payload req, ILogger log)
     {
@@ -32,7 +32,7 @@ public static class LocalWordFilter
         return new OkObjectResult(response);
     }
 
-    [FunctionName("Detect")]
+    [FunctionName("LocalDetect")]
     public static async Task<IActionResult> Detect(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "local/detect")] Payload req, ILogger log)
     {
@@ -41,6 +41,17 @@ public static class LocalWordFilter
         var words = Environment.GetEnvironmentVariable("Keywords");
         IModerator moderator = new LocalModerator(words);
 
-        return new OkResult();
+        var result = await moderator.HasBadWord(req.Content);
+
+        var response = new ModeratorResponse
+        {
+            Moderator = nameof(LocalModerator),
+            Mode = nameof(Detect),
+            OriginAspNetRequestId = req.OriginAspNetRequestId,
+            ProcessedContent = null,
+            Positive = result
+        };
+
+        return new OkObjectResult(response);
     }
 }
