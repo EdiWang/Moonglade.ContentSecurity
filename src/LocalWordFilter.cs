@@ -14,9 +14,7 @@ public static class LocalWordFilter
     {
         log.LogInformation("C# HTTP trigger function local/mask processed a request.");
 
-        var words = Environment.GetEnvironmentVariable("Keywords");
-        IModerator moderator = new LocalModerator(words);
-
+        var moderator = GetLocalModerator();
         var result = await moderator.ModerateContent(req.Content);
 
         var response = new ModeratorResponse
@@ -36,9 +34,7 @@ public static class LocalWordFilter
     {
         log.LogInformation("C# HTTP trigger function local/detect processed a request.");
 
-        var words = Environment.GetEnvironmentVariable("Keywords");
-        IModerator moderator = new LocalModerator(words);
-
+        var moderator = GetLocalModerator();
         var result = await moderator.HasBadWord(req.Content);
 
         var response = new ModeratorResponse
@@ -51,5 +47,12 @@ public static class LocalWordFilter
         };
 
         return new OkObjectResult(response);
+    }
+
+    private static IModerator GetLocalModerator()
+    {
+        var words = Environment.GetEnvironmentVariable("Keywords");
+        IModerator moderator = new LocalModerator(words);
+        return moderator;
     }
 }

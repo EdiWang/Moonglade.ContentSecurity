@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using Microsoft.Azure.CognitiveServices.ContentModerator;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Azure.CognitiveServices.ContentModerator;
 
 namespace Moonglade.ContentSecurity.Moderators;
 

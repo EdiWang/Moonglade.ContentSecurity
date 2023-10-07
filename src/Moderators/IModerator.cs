@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Moonglade.ContentSecurity.Moderators;
+﻿namespace Moonglade.ContentSecurity.Moderators;
 
 public interface IModerator
 {
