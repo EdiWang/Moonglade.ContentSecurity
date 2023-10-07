@@ -12,7 +12,7 @@ public static class LocalWordFilter
     public static async Task<IActionResult> Mask(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "local/mask")] Payload req, ILogger log)
     {
-        log.LogInformation("C# HTTP trigger function Mask processed a request.");
+        log.LogInformation("C# HTTP trigger function local/mask processed a request.");
 
         var words = Environment.GetEnvironmentVariable("Keywords");
         IModerator moderator = new LocalModerator(words);
@@ -34,7 +34,7 @@ public static class LocalWordFilter
     public static async Task<IActionResult> Detect(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "local/detect")] Payload req, ILogger log)
     {
-        log.LogInformation("C# HTTP trigger function Detect processed a request.");
+        log.LogInformation("C# HTTP trigger function local/detect processed a request.");
 
         var words = Environment.GetEnvironmentVariable("Keywords");
         IModerator moderator = new LocalModerator(words);
