@@ -1,4 +1,4 @@
-name: Moonglade.Function.Email Build and Deploy
+name: Moonglade.ContentSecurity Build and Deploy
 
 on:
   push:
