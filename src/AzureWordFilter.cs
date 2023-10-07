@@ -16,14 +16,7 @@ public static class AzureWordFilter
     {
         log.LogInformation("C# HTTP trigger function azure/mask processed a request.");
 
-        var oask = Environment.GetEnvironmentVariable("OcpApimSubscriptionKey");
-        var cred = new ApiKeyServiceClientCredentials(oask);
-
-        IModerator moderator = new AzureContentModerator(new ContentModeratorClient(cred)
-        {
-            Endpoint = Environment.GetEnvironmentVariable("Endpoint")
-        });
-
+        var moderator = GetAzureModerator();
         var result = await moderator.ModerateContent(req.Content);
 
         var response = new ModeratorResponse
@@ -44,14 +37,7 @@ public static class AzureWordFilter
     {
         log.LogInformation("C# HTTP trigger function azure/detect processed a request.");
 
-        var oask = Environment.GetEnvironmentVariable("OcpApimSubscriptionKey");
-        var cred = new ApiKeyServiceClientCredentials(oask);
-
-        IModerator moderator = new AzureContentModerator(new ContentModeratorClient(cred)
-        {
-            Endpoint = Environment.GetEnvironmentVariable("Endpoint")
-        });
-
+        var moderator = GetAzureModerator();
         var result = await moderator.HasBadWord(req.Content);
 
         var response = new ModeratorResponse
@@ -64,5 +50,17 @@ public static class AzureWordFilter
         };
 
         return new OkObjectResult(response);
+    }
+
+    private static IModerator GetAzureModerator()
+    {
+        var oask = Environment.GetEnvironmentVariable("OcpApimSubscriptionKey");
+        var cred = new ApiKeyServiceClientCredentials(oask);
+
+        IModerator moderator = new AzureContentModerator(new ContentModeratorClient(cred)
+        {
+            Endpoint = Environment.GetEnvironmentVariable("Endpoint")
+        });
+        return moderator;
     }
 }
