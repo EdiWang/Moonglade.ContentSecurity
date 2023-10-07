@@ -15,14 +15,25 @@ public static class LocalWordFilter
         log.LogInformation("C# HTTP trigger function local/mask processed a request.");
 
         var moderator = GetLocalModerator();
-        var result = await moderator.ModerateContent(req.Content);
+
+        var processedContents = new List<ProcessedContent>();
+
+        foreach (var reqContent in req.Contents)
+        {
+            var result = await moderator.ModerateContent(reqContent.RawText);
+            processedContents.Add(new ProcessedContent
+            {
+                Id = reqContent.Id,
+                ProcessedText = result
+            });
+        }
 
         var response = new ModeratorResponse
         {
             Moderator = nameof(LocalModerator),
             Mode = nameof(Mask),
             OriginAspNetRequestId = req.OriginAspNetRequestId,
-            ProcessedContent = result
+            ProcessedContents = processedContents.ToArray()
         };
 
         return new OkObjectResult(response);
@@ -35,14 +46,14 @@ public static class LocalWordFilter
         log.LogInformation("C# HTTP trigger function local/detect processed a request.");
 
         var moderator = GetLocalModerator();
-        var result = await moderator.HasBadWord(req.Content);
+        var result = await moderator.HasBadWord(req.Contents.Select(p => p.RawText).ToArray());
 
         var response = new ModeratorResponse
         {
             Moderator = nameof(LocalModerator),
             Mode = nameof(Detect),
             OriginAspNetRequestId = req.OriginAspNetRequestId,
-            ProcessedContent = null,
+            ProcessedContents = null,
             Positive = result
         };
 
