@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Moonglade.ContentSecurity;
+namespace Moonglade.ContentSecurity.Moderators;
 
-public interface ICommentModerator
+public interface IModerator
 {
     public Task<string> ModerateContent(string input);
 

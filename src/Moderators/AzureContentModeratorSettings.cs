@@ -1,4 +1,4 @@
-﻿namespace Moonglade.ContentSecurity;
+﻿namespace Moonglade.ContentSecurity.Moderators;
 
 public class AzureContentModeratorSettings
 {

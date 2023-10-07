@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Edi.WordFilter;
 
-namespace Moonglade.ContentSecurity;
+namespace Moonglade.ContentSecurity.Moderators;
 
-public class LocalModerator : ICommentModerator
+public class LocalModerator : IModerator
 {
     private readonly IMaskWordFilter _filter;
 

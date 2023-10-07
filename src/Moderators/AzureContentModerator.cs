@@ -4,9 +4,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.CognitiveServices.ContentModerator;
 
-namespace Moonglade.ContentSecurity;
+namespace Moonglade.ContentSecurity.Moderators;
 
-public class AzureContentModerator : ICommentModerator, IDisposable
+public class AzureContentModerator : IModerator, IDisposable
 {
     private readonly IContentModeratorClient _client;
 
