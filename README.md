@@ -7,8 +7,6 @@ This Function provides two types of moderation:
 - Local: filter harmful text by a local dictionary
 - Azure: filter harmful text by Azure Content Moderator
 
-**NOTE: This project will be upgraded to .NET 8.0 LTS in November 2023, please prepare your server runtime in advance.**
-
 ## Get Started
 
 Tools | Alternative
@@ -62,3 +60,48 @@ Sample ```local.settings.json``` file
   }
 }
 ```
+
+## Creating Your Own API
+
+If you have any reason to not use this project, such as a dislike for Azure or C#, it is completely acceptable to develop your own API. Moonglade utilizes standard REST API calls, as long as your API functions with the same request and response interface contract outlined below.
+
+### Request Example
+
+```json
+{
+    "originAspNetRequestId": "1",
+    "contents": [
+        {
+            "Id": "1",
+            "RawText": "fuck some shit"
+        },
+        {
+            "Id": "2",
+            "RawText": "suck my dick"
+        }
+    ]
+}
+```
+
+### Response Example
+
+```json
+{
+    "originAspNetRequestId": "1",
+    "moderator": "LocalModerator",
+    "mode": "Mask",
+    "processedContents": [
+        {
+            "id": "1",
+            "processedText": "**** some ****"
+        },
+        {
+            "id": "2",
+            "processedText": "suck my ****"
+        }
+    ],
+    "positive": null
+}
+```
+
+Please see source code for more details.
