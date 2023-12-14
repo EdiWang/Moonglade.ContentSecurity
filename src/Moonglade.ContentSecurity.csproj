@@ -8,12 +8,12 @@
         <DockerfileContext>.</DockerfileContext>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Edi.WordFilter" Version="1.8.0" />
+        <PackageReference Include="Edi.WordFilter" Version="2.0.1" />
         <PackageReference Include="Microsoft.Azure.CognitiveServices.ContentModerator" Version="2.0.0" />
         <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.2.0" />
-        <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.21.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ApplicationInsights" Version="1.0.0-preview4" />
-        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.2.1" />
+        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.2.2" />
     </ItemGroup>
     <ItemGroup>
         <None Update="host.json">

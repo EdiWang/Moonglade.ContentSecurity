@@ -9,7 +9,21 @@ public class LocalModerator : IModerator
     public LocalModerator(string words)
     {
         var sw = new StringWordSource(words);
-        _filter = new MaskWordFilter(sw);
+
+        var random = new Random();
+        IMaskWordFilter filter;
+
+        // 50/50 chance to use HashTableWordFilter or TrieTreeWordFilter as a test
+        if (random.Next(2) == 0)
+        {
+            filter = new HashTableWordFilter(sw);
+        }
+        else
+        {
+            filter = new TrieTreeWordFilter(sw);
+        }
+
+        _filter = filter;
     }
 
     public Task<string> ModerateContent(string input) => Task.FromResult(_filter.FilterContent(input));
