@@ -8,7 +8,7 @@
         <DockerfileContext>.</DockerfileContext>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Edi.WordFilter" Version="2.1.0" />
+        <PackageReference Include="Edi.WordFilter" Version="2.2.0" />
         <PackageReference Include="Microsoft.Azure.CognitiveServices.ContentModerator" Version="2.0.0" />
         <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.2.0" />
         <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />

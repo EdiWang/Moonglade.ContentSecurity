@@ -10,19 +10,7 @@ public class LocalModerator : IModerator
     {
         var sw = new StringWordSource(words);
 
-        var random = new Random();
-        IMaskWordFilter filter;
-
-        // 50/50 chance to use HashTableWordFilter or TrieTreeWordFilter as a test
-        if (random.Next(2) == 0)
-        {
-            filter = new HashTableWordFilter(sw);
-        }
-        else
-        {
-            filter = new TrieTreeWordFilter(sw);
-        }
-
+        IMaskWordFilter filter = new TrieTreeWordFilter(sw);
         _filter = filter;
     }
 
