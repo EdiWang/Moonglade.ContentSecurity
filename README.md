@@ -5,7 +5,7 @@ The Azure Function used by my blog (https://edi.wang) for filtering harmful text
 This Function provides two types of moderation:
 
 - Local: filter harmful text by a local dictionary
-- Azure: filter harmful text by Azure Content Moderator
+- Azure: filter harmful text by [Azure AI Content Safety](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/?WT.mc_id=AZ-MVP-5002809)
 
 ## Get Started
 
@@ -54,9 +54,9 @@ Sample ```local.settings.json``` file
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "Keywords": "fuck|shit|dick",
-    "Endpoint": "https://**********.cognitiveservices.azure.com/",
-    "OcpApimSubscriptionKey": "**********"
+    "Keywords": "example|harmful|words",
+    "Endpoint": "https://<your resource name>.cognitiveservices.azure.com/",
+    "OcpApimSubscriptionKey": "<your key>"
   }
 }
 ```
@@ -73,11 +73,11 @@ If you have any reason to not use this project, such as a dislike for Azure or C
     "contents": [
         {
             "Id": "1",
-            "RawText": "fuck some shit"
+            "RawText": "This is an example of harmful words"
         },
         {
             "Id": "2",
-            "RawText": "suck my dick"
+            "RawText": "Glad to meet you"
         }
     ]
 }
@@ -93,11 +93,11 @@ If you have any reason to not use this project, such as a dislike for Azure or C
     "processedContents": [
         {
             "id": "1",
-            "processedText": "**** some ****"
+            "processedText": "This is an * of * *"
         },
         {
             "id": "2",
-            "processedText": "suck my ****"
+            "processedText": "Glad to meet you"
         }
     ],
     "positive": null
