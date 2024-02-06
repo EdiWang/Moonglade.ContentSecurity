@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.CognitiveServices.ContentModerator;
+﻿using Azure;
+using Azure.AI.ContentSafety;
+using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
@@ -16,7 +18,7 @@ public static class AzureWordFilter
     {
         log.LogInformation("C# HTTP trigger function azure/mask processed a request.");
 
-        var moderator = GetAzureModerator();
+        var moderator = await GetAzureModerator();
 
         var processedContents = new List<ProcessedContent>();
 
@@ -32,7 +34,7 @@ public static class AzureWordFilter
 
         var response = new ModeratorResponse
         {
-            Moderator = nameof(AzureContentModerator),
+            Moderator = nameof(AzureAIContentSafetyModerator),
             Mode = nameof(Mask),
             OriginAspNetRequestId = req.OriginAspNetRequestId,
             ProcessedContents = processedContents.ToArray()
@@ -48,12 +50,12 @@ public static class AzureWordFilter
     {
         log.LogInformation("C# HTTP trigger function azure/detect processed a request.");
 
-        var moderator = GetAzureModerator();
+        var moderator = await GetAzureModerator();
         var result = await moderator.HasBadWord(req.Contents.Select(p => p.RawText).ToArray());
 
         var response = new ModeratorResponse
         {
-            Moderator = nameof(AzureContentModerator),
+            Moderator = nameof(AzureAIContentSafetyModerator),
             Mode = nameof(Detect),
             OriginAspNetRequestId = req.OriginAspNetRequestId,
             ProcessedContents = null,
@@ -63,15 +65,38 @@ public static class AzureWordFilter
         return new OkObjectResult(response);
     }
 
-    private static IModerator GetAzureModerator()
+    private static async Task<IModerator> GetAzureModerator()
     {
         var oask = Environment.GetEnvironmentVariable("OcpApimSubscriptionKey");
-        var cred = new ApiKeyServiceClientCredentials(oask);
+        var cred = new AzureKeyCredential(oask!);
 
-        IModerator moderator = new AzureContentModerator(new ContentModeratorClient(cred)
+        IModerator moderator = new AzureAIContentSafetyModerator(new ContentSafetyClient(new Uri(Environment.GetEnvironmentVariable("Endpoint")!), cred));
+
+        BlocklistClient blocklistClient = new BlocklistClient(new Uri(Environment.GetEnvironmentVariable("Endpoint")!), cred);
+
+        var blocklistName = "Moonglade.ContentSecurity.BlockList";
+        var blocklistDescription = "User defined keywords";
+
+        var data = new
         {
-            Endpoint = Environment.GetEnvironmentVariable("Endpoint")
-        });
-        return moderator;
+            description = blocklistDescription,
+        };
+
+        var createResponse = await blocklistClient.CreateOrUpdateTextBlocklistAsync(blocklistName, RequestContent.Create(data));
+        if (createResponse.Status is 200 or 201)
+        {
+            var keywordsList = Environment.GetEnvironmentVariable("Keywords")!.Split('|').ToList();
+            var blockItems = keywordsList.Select(p => new TextBlocklistItem(p)).ToArray();
+
+            var addedBlockItems = await blocklistClient.AddOrUpdateBlocklistItemsAsync(blocklistName,
+                new AddOrUpdateTextBlocklistItemsOptions(blockItems));
+
+            if (addedBlockItems is { Value: not null })
+            {
+                return moderator;
+            }
+        }
+
+        return null;
     }
 }
