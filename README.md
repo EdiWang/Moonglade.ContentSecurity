@@ -35,12 +35,12 @@ Once deployed to Azure, set the following environment variables in Azure Portal 
 
 ### Azure Moderation
 
-Pre-requisite: create an Azure Content Moderator resource in Azure Portal, and get the endpoint and subscription key.
+Pre-requisite: create an [Azure AI Content Safety](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/?WT.mc_id=AZ-MVP-5002809) resource in Azure Portal, and get the endpoint and key.
 
 Once deployed to Azure, set the following environment variables in Azure Portal (Configuration blade) or Azure CLI:
 
-- `Endpoint`: the endpoint of your Azure Content Moderator
-- `OcpApimSubscriptionKey`: the subscription key of your Azure Content Moderator
+- `Endpoint`: the endpoint of your [Azure AI Content Safety](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/?WT.mc_id=AZ-MVP-5002809) resource
+- `OcpApimSubscriptionKey`: the key of your [Azure AI Content Safety](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/?WT.mc_id=AZ-MVP-5002809) resource
 
 ## Development and Debugging
 
