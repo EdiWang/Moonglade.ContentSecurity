@@ -19,7 +19,7 @@ public class AzureAIContentSafetyModerator : IModerator
         if (screenResult.Value is not null)
         {
             // BlocklistMatch, replace with *
-            input = screenResult.Value.BlocklistsMatch.Aggregate(input, 
+            input = screenResult.Value.BlocklistsMatch.Aggregate(input,
                 (current, item) => current.Replace(item.BlocklistItemText, "*"));
 
             var positiveCats = screenResult.Value.CategoriesAnalysis.Where(item => item.Severity > 0)

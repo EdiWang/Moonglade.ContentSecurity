@@ -1,18 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Moonglade.ContentSecurity.Moderators;
 
 namespace Moonglade.ContentSecurity;
 
-public static class LocalWordFilter
+public class LocalWordFilter(ILogger<LocalWordFilter> logger)
 {
-    [FunctionName("LocalMask")]
-    public static async Task<IActionResult> Mask(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "local/mask")] Payload req, ILogger log)
+    [Function("LocalMask")]
+    public async Task<IActionResult> Mask(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "local/mask")] Payload req)
     {
-        log.LogInformation("C# HTTP trigger function local/mask processed a request.");
+        logger.LogInformation("C# HTTP trigger function local/mask processed a request.");
 
         var moderator = GetLocalModerator();
 
@@ -21,7 +20,7 @@ public static class LocalWordFilter
         foreach (var reqContent in req.Contents)
         {
             var result = await moderator.ModerateContent(reqContent.RawText);
-            processedContents.Add(new ProcessedContent
+            processedContents.Add(new()
             {
                 Id = reqContent.Id,
                 ProcessedText = result
@@ -39,11 +38,11 @@ public static class LocalWordFilter
         return new OkObjectResult(response);
     }
 
-    [FunctionName("LocalDetect")]
-    public static async Task<IActionResult> Detect(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "local/detect")] Payload req, ILogger log)
+    [Function("LocalDetect")]
+    public async Task<IActionResult> Detect(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "local/detect")] Payload req)
     {
-        log.LogInformation("C# HTTP trigger function local/detect processed a request.");
+        logger.LogInformation("C# HTTP trigger function local/detect processed a request.");
 
         var moderator = GetLocalModerator();
         var result = await moderator.HasBadWord(req.Contents.Select(p => p.RawText).ToArray());

@@ -1,19 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <AzureFunctionsVersion>v4</AzureFunctionsVersion>
         <ImplicitUsings>enable</ImplicitUsings>
-        <DockerFastModeProjectMountDirectory>/home/site/wwwroot</DockerFastModeProjectMountDirectory>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <DockerfileContext>.</DockerfileContext>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
     <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+
         <PackageReference Include="Azure.AI.ContentSafety" Version="1.0.0" />
         <PackageReference Include="Edi.WordFilter" Version="2.3.0" />
-        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.3.0" />
-        <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.21.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" Version="4.3.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.17.2" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.2.1" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.2.0" />
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ApplicationInsights" Version="1.0.0-preview4" />
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.2.2" />
+        <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
     </ItemGroup>
     <ItemGroup>
         <None Update="host.json">
@@ -23,5 +27,8 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <CopyToPublishDirectory>Never</CopyToPublishDirectory>
         </None>
+    </ItemGroup>
+    <ItemGroup>
+        <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
     </ItemGroup>
 </Project>

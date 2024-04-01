@@ -2,21 +2,20 @@
 using Azure.AI.ContentSafety;
 using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Moonglade.ContentSecurity.Moderators;
 
 namespace Moonglade.ContentSecurity;
 
-public static class AzureWordFilter
+public class AzureWordFilter(ILogger<AzureWordFilter> logger)
 {
-    [FunctionName("AzureMask")]
-    public static async Task<IActionResult> Mask(
+    [Function("AzureMask")]
+    public async Task<IActionResult> Mask(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "azure/mask")]
-        Payload req, ILogger log)
+        Payload req)
     {
-        log.LogInformation("C# HTTP trigger function azure/mask processed a request.");
+        logger.LogInformation("C# HTTP trigger function azure/mask processed a request.");
 
         var moderator = await GetAzureModerator();
 
@@ -25,7 +24,7 @@ public static class AzureWordFilter
         foreach (var reqContent in req.Contents)
         {
             var result = await moderator.ModerateContent(reqContent.RawText);
-            processedContents.Add(new ProcessedContent
+            processedContents.Add(new()
             {
                 Id = reqContent.Id,
                 ProcessedText = result
@@ -43,12 +42,12 @@ public static class AzureWordFilter
         return new OkObjectResult(response);
     }
 
-    [FunctionName("AzureDetect")]
-    public static async Task<IActionResult> Detect(
+    [Function("AzureDetect")]
+    public async Task<IActionResult> Detect(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "azure/detect")]
-        Payload req, ILogger log)
+        Payload req)
     {
-        log.LogInformation("C# HTTP trigger function azure/detect processed a request.");
+        logger.LogInformation("C# HTTP trigger function azure/detect processed a request.");
 
         var moderator = await GetAzureModerator();
         var result = await moderator.HasBadWord(req.Contents.Select(p => p.RawText).ToArray());
@@ -70,9 +69,9 @@ public static class AzureWordFilter
         var oask = Environment.GetEnvironmentVariable("OcpApimSubscriptionKey");
         var cred = new AzureKeyCredential(oask!);
 
-        IModerator moderator = new AzureAIContentSafetyModerator(new ContentSafetyClient(new Uri(Environment.GetEnvironmentVariable("Endpoint")!), cred));
+        IModerator moderator = new AzureAIContentSafetyModerator(new(new(Environment.GetEnvironmentVariable("Endpoint")!), cred));
 
-        BlocklistClient blocklistClient = new BlocklistClient(new Uri(Environment.GetEnvironmentVariable("Endpoint")!), cred);
+        BlocklistClient blocklistClient = new BlocklistClient(new(Environment.GetEnvironmentVariable("Endpoint")!), cred);
 
         var blocklistName = "Moonglade.ContentSecurity.BlockList";
         var blocklistDescription = "User defined keywords";
