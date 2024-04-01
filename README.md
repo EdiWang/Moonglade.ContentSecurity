@@ -11,7 +11,7 @@ This Function provides two types of moderation:
 
 Tools | Alternative
 --- | ---
-[.NET 6.0 SDK](http://dot.net) | N/A
+[.NET 8.0 SDK](http://dot.net) | N/A
 [Visual Studio 2022](https://visualstudio.microsoft.com/) with Azure Development payload| [Visual Studio Code](https://code.visualstudio.com/)
 [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) | N/A
 [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) | N/A
@@ -53,7 +53,7 @@ Sample ```local.settings.json``` file
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
     "Keywords": "example|harmful|words",
     "Endpoint": "https://<your resource name>.cognitiveservices.azure.com/",
     "OcpApimSubscriptionKey": "<your key>"
