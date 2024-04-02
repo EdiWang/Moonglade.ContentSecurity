@@ -1,10 +1,12 @@
 ﻿using Azure;
 using Azure.AI.ContentSafety;
 using Azure.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Moonglade.ContentSecurity.Moderators;
+using FromBodyAttribute = Microsoft.Azure.Functions.Worker.Http.FromBodyAttribute;
 
 namespace Moonglade.ContentSecurity;
 
@@ -13,7 +15,8 @@ public class AzureWordFilter(ILogger<AzureWordFilter> logger)
     [Function("AzureMask")]
     public async Task<IActionResult> Mask(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "azure/mask")]
-        Payload req)
+        HttpRequest req,
+        [FromBody] Payload payload)
     {
         logger.LogInformation("C# HTTP trigger function azure/mask processed a request.");
 
@@ -21,7 +24,7 @@ public class AzureWordFilter(ILogger<AzureWordFilter> logger)
 
         var processedContents = new List<ProcessedContent>();
 
-        foreach (var reqContent in req.Contents)
+        foreach (var reqContent in payload.Contents)
         {
             var result = await moderator.ModerateContent(reqContent.RawText);
             processedContents.Add(new()
@@ -35,7 +38,7 @@ public class AzureWordFilter(ILogger<AzureWordFilter> logger)
         {
             Moderator = nameof(AzureAIContentSafetyModerator),
             Mode = nameof(Mask),
-            OriginAspNetRequestId = req.OriginAspNetRequestId,
+            OriginAspNetRequestId = payload.OriginAspNetRequestId,
             ProcessedContents = processedContents.ToArray()
         };
 
@@ -45,18 +48,19 @@ public class AzureWordFilter(ILogger<AzureWordFilter> logger)
     [Function("AzureDetect")]
     public async Task<IActionResult> Detect(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "azure/detect")]
-        Payload req)
+        HttpRequest req,
+        [FromBody] Payload payload)
     {
         logger.LogInformation("C# HTTP trigger function azure/detect processed a request.");
 
         var moderator = await GetAzureModerator();
-        var result = await moderator.HasBadWord(req.Contents.Select(p => p.RawText).ToArray());
+        var result = await moderator.HasBadWord(payload.Contents.Select(p => p.RawText).ToArray());
 
         var response = new ModeratorResponse
         {
             Moderator = nameof(AzureAIContentSafetyModerator),
             Mode = nameof(Detect),
-            OriginAspNetRequestId = req.OriginAspNetRequestId,
+            OriginAspNetRequestId = payload.OriginAspNetRequestId,
             ProcessedContents = null,
             Positive = result
         };
