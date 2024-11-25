@@ -10,6 +10,7 @@
 
         <PackageReference Include="Azure.AI.ContentSafety" Version="1.0.0" />
         <PackageReference Include="Edi.WordFilter" Version="2.5.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.34" />
         <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.0.0" />
         <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" Version="4.3.1" />
         <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.0" />
