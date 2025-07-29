@@ -53,7 +53,7 @@ Sample ```local.settings.json``` file
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "Keywords": "example|harmful|words",
     "Endpoint": "https://<your resource name>.cognitiveservices.azure.com/",
     "OcpApimSubscriptionKey": "<your key>"
