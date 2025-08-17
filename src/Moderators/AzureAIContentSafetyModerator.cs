@@ -2,19 +2,15 @@
 
 namespace Moonglade.ContentSecurity.Moderators;
 
-public class AzureAIContentSafetyModerator : IModerator
+public class AzureAIContentSafetyModerator(ContentSafetyClient client) : IModerator
 {
-    private readonly ContentSafetyClient _client;
-
-    public AzureAIContentSafetyModerator(ContentSafetyClient client) => _client = client;
-
     public async Task<string> ModerateContent(string input)
     {
         var request = new AnalyzeTextOptions(input);
         request.BlocklistNames.Add("Moonglade.ContentSecurity.BlockList");
         //request.HaltOnBlocklistHit = true;
 
-        var screenResult = await _client.AnalyzeTextAsync(request);
+        var screenResult = await client.AnalyzeTextAsync(request);
 
         if (screenResult.Value is not null)
         {
@@ -43,7 +39,7 @@ public class AzureAIContentSafetyModerator : IModerator
             request.BlocklistNames.Add("Moonglade.ContentSecurity.BlockList");
             //request.HaltOnBlocklistHit = true;
 
-            var screenResult = await _client.AnalyzeTextAsync(request);
+            var screenResult = await client.AnalyzeTextAsync(request);
             return screenResult.Value is not null &&
                    (screenResult.Value.BlocklistsMatch.Any() ||
                     screenResult.Value.CategoriesAnalysis.Any(item => item.Severity > 0));
