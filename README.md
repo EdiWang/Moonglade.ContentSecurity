@@ -8,8 +8,8 @@ This Function filter harmful text by [Azure AI Content Safety](https://learn.mic
 
 Tools | Alternative
 --- | ---
-[.NET 10.0 SDK](http://dot.net) | N/A
-[Visual Studio 2026](https://visualstudio.microsoft.com/) with Azure Development payload| [Visual Studio Code](https://code.visualstudio.com/)
+[.NET 8.0 SDK](http://dot.net) | N/A
+[Visual Studio 2022](https://visualstudio.microsoft.com/) with Azure Development payload| [Visual Studio Code](https://code.visualstudio.com/)
 [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) | N/A
 [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) | N/A
 
