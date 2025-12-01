@@ -14,7 +14,7 @@ public class AzureWordFilter(ILogger<AzureWordFilter> logger)
 {
     [Function("AzureMask")]
     public async Task<IActionResult> Mask(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "azure/mask")]
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "mask")]
         HttpRequest req,
         [FromBody] Payload payload)
     {
@@ -47,7 +47,7 @@ public class AzureWordFilter(ILogger<AzureWordFilter> logger)
 
     [Function("AzureDetect")]
     public async Task<IActionResult> Detect(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "azure/detect")]
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "detect")]
         HttpRequest req,
         [FromBody] Payload payload)
     {
