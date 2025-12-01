@@ -24,7 +24,7 @@ Recommendations:
 - Enable 64 bit worker process in Azure Function App settings.
 - Enable Always On in Azure Function App settings.
 - Enable Application Insights in Azure Function App settings.
-- Do NOT use consumption plan due to cold start time.
+- Use App Service Plan hosting model for better performance.
 
 ### Azure Moderation
 
