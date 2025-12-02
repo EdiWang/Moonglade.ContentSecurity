@@ -12,7 +12,7 @@ namespace Moonglade.ContentSecurity;
 
 public class AzureWordFilter(ILogger<AzureWordFilter> logger)
 {
-    [Function("AzureMask")]
+    [Function("Mask")]
     public async Task<IActionResult> Mask(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "mask")]
         HttpRequest req,
@@ -45,7 +45,7 @@ public class AzureWordFilter(ILogger<AzureWordFilter> logger)
         return new OkObjectResult(response);
     }
 
-    [Function("AzureDetect")]
+    [Function("Detect")]
     public async Task<IActionResult> Detect(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "detect")]
         HttpRequest req,
